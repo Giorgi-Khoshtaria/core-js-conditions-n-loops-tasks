@@ -163,10 +163,62 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
-}
+function convertNumberToString(numStr) {
+  let textString = '';
+  let finalTextString = '';
 
+  for (let i = 0; i < numStr.length; i += 1) {
+    switch (numStr[i]) {
+      case '0':
+        textString += 'zero ';
+        break;
+      case '1':
+        textString += 'one ';
+        break;
+      case '2':
+        textString += 'two ';
+        break;
+      case '3':
+        textString += 'three ';
+        break;
+      case '4':
+        textString += 'four ';
+        break;
+      case '5':
+        textString += 'five ';
+        break;
+      case '6':
+        textString += 'six ';
+        break;
+      case '7':
+        textString += 'seven ';
+        break;
+      case '8':
+        textString += 'eight ';
+        break;
+      case '9':
+        textString += 'nine ';
+        break;
+      case '.':
+        textString += 'point ';
+        break;
+      case ',':
+        textString += 'point ';
+        break;
+      case '-':
+        textString += 'minus ';
+        break;
+      default:
+        break;
+    }
+  }
+
+  for (let i = 0; i < textString.length - 1; i += 1) {
+    finalTextString += textString[i];
+  }
+
+  return finalTextString;
+}
 /**
  * Determines whether a string is a palindrome.
  * In this task, the use of methods of the String and Array classes is not allowed.
@@ -179,8 +231,16 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  let revString = '';
+  let i = str.length - 1;
+
+  while (i >= 0) {
+    revString += str[i];
+    i -= 1;
+  }
+
+  return str === revString;
 }
 
 /**
@@ -197,8 +257,12 @@ function isPalindrome(/* str */) {
  *  'qwerty', 'Q'     => -1
  *  'qwerty', 'p'     => -1
  */
-function getIndexOf(/* str, letter */) {
-  throw new Error('Not implemented');
+function getIndexOf(str, letter) {
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === letter) return i;
+  }
+
+  return -1;
 }
 
 /**
@@ -216,8 +280,14 @@ function getIndexOf(/* str, letter */) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(num, digit) {
+  const Num = String(num);
+
+  for (let i = 0; i < Num.length; i += 1) {
+    if (+Num[i] === digit) return true;
+  }
+
+  return false;
 }
 
 /**
@@ -233,8 +303,19 @@ function isContainNumber(/* num, digit */) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let rightSum = 0;
+  let leftSum = 0;
+  for (let i = 0; i < arr.length; i += 1) {
+    rightSum += arr[i];
+  }
+  for (let i = 0; i < arr.length; i += 1) {
+    rightSum -= arr[i];
+
+    if (leftSum === rightSum) return i;
+    leftSum += arr[i];
+  }
+  return -1;
 }
 
 /**
@@ -258,10 +339,40 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = new Array(size);
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = new Array(size);
+  }
+  let row = 0;
+  let col = 0;
+  let rowEnd = size - 1;
+  let colEnd = size - 1;
+  let counter = 1;
+  while (col <= colEnd && row <= rowEnd) {
+    for (let i = col; i <= colEnd; i += 1) {
+      matrix[row][i] = counter;
+      counter += 1;
+    }
+    row += 1;
+    for (let i = row; i <= rowEnd; i += 1) {
+      matrix[i][colEnd] = counter;
+      counter += 1;
+    }
+    colEnd -= 1;
+    for (let i = colEnd; i >= col; i -= 1) {
+      matrix[rowEnd][i] = counter;
+      counter += 1;
+    }
+    rowEnd -= 1;
+    for (let i = rowEnd; i >= row; i -= 1) {
+      matrix[i][col] = counter;
+      counter += 1;
+    }
+    col += 1;
+  }
+  return matrix;
 }
-
 /**
  * Rotates a matrix by 90 degrees clockwise in place.
  * Take into account that the matrix size can be very large. Consider how you can optimize your solution.
