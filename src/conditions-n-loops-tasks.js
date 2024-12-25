@@ -373,23 +373,32 @@ function getSpiralMatrix(size) {
   }
   return matrix;
 }
-/**
- * Rotates a matrix by 90 degrees clockwise in place.
- * Take into account that the matrix size can be very large. Consider how you can optimize your solution.
- * Usage of String and Array class methods is not allowed in this task.
- *
- * @param {number[][]} matrix - The matrix to rotate.
- * @return {number[][]} The rotated matrix.
- *
- * @example:
- *  [                 [
- *    [1, 2, 3],        [7, 4, 1],
- *    [4, 5, 6],  =>    [8, 5, 2],
- *    [7, 8, 9]         [9, 6, 3]
- *  ]                 ]
- */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const n = matrix.length;
+  const rotatedMatrix = matrix;
+
+  for (let i = 0; i < n; i += 1) {
+    for (let j = i; j < n; j += 1) {
+      const temp = matrix[i][j];
+      rotatedMatrix[i][j] = matrix[j][i];
+      rotatedMatrix[j][i] = temp;
+    }
+  }
+
+  for (let i = 0; i < n; i += 1) {
+    let left = 0;
+    let right = n - 1;
+
+    while (left < right) {
+      const temp = matrix[i][left];
+      rotatedMatrix[i][left] = matrix[i][right];
+      rotatedMatrix[i][right] = temp;
+      left += 1;
+      right -= 1;
+    }
+  }
+
+  return rotatedMatrix;
 }
 
 /**
@@ -406,8 +415,17 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const resArr = arr;
+  for (let i = 1; i < arr.length; i += 1) {
+    const currentEl = arr[i];
+    let j;
+    for (j = i - 1; j >= 0 && arr[j] > currentEl; j -= 1) {
+      resArr[j + 1] = arr[j];
+    }
+    resArr[j + 1] = currentEl;
+  }
+  return resArr;
 }
 
 /**
@@ -427,8 +445,30 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  const seen = new Map();
+  let currentStr = str;
+
+  for (let i = 0; i < iterations; i += 1) {
+    if (seen.has(currentStr)) {
+      const cycleStart = seen.get(currentStr);
+      const cycleLength = i - cycleStart;
+      const remainingIterations = (iterations - i) % cycleLength;
+      return shuffleChar(currentStr, remainingIterations);
+    }
+    seen.set(currentStr, i);
+    let even = '';
+    let odd = '';
+    for (let j = 0; j < currentStr.length; j += 1) {
+      if (j % 2 === 0) {
+        even += currentStr[j];
+      } else {
+        odd += currentStr[j];
+      }
+    }
+    currentStr = even + odd;
+  }
+  return currentStr;
 }
 
 /**
@@ -448,8 +488,45 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const digits = [];
+  let temp = number;
+  while (temp > 0) {
+    digits.unshift(temp % 10);
+    temp = Math.floor(temp / 10);
+  }
+
+  const n = digits.length;
+  let i = n - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i === -1) {
+    return false;
+  }
+
+  let j = n - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  [digits[i], digits[j]] = [digits[j], digits[i]];
+
+  let left = i + 1;
+  let right = n - 1;
+  while (left < right) {
+    [digits[left], digits[right]] = [digits[right], digits[left]];
+    left += 1;
+    right -= 1;
+  }
+
+  let result = 0;
+  for (let k = 0; k < n; k += 1) {
+    result = result * 10 + digits[k];
+  }
+
+  return result;
 }
 
 module.exports = {
